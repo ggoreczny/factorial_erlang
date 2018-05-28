@@ -10,16 +10,30 @@
 -author("merk").
 
 %% API
--export([start/0, stop/0, factorial/1, factorialRecorder/2]).
-
-start() ->
-  factorial_server:start_link().
-
-stop() ->
-  factorial_server:stop().
+-export([factorial/1, factorialRecorder/2, storeComment/2, getComments/1, getCommentsWithStamp/1, deleteComment/1]).
 
 factorial(Value) ->
-  factorial_server:factorial(Value).
+  Result = factorial_server:factorial(Value),
+  io:format("Factorial for ~p is ~p ~n", [Value, Result]).
 
 factorialRecorder(Value, IoDevice) ->
   factorial_server:factorial(Value, IoDevice).
+
+storeComment(NodeName, Comment) ->
+
+  {atomic, Result} = database_server:store(NodeName, Comment),
+
+  case Result of
+      ok -> io:format("Comment saved for ~p ~n", [NodeName]);
+      _ -> io:format("Comment has not been saved for ~p ~n", [NodeName])
+  end.
+
+getComments(NodeName) ->
+  database_server:getDB(NodeName).
+
+getCommentsWithStamp(NodeName) ->
+  Results = database_server:getDBTwo(NodeName),
+  lists:foreach(fun({CM, CO}) -> io:format("Comment ~p  Created on ~p ~n", [CM, CO])end, Results).
+
+deleteComment(NodeName) ->
+  database_server:delete(NodeName).

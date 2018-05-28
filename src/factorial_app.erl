@@ -8,19 +8,24 @@
 -behaviour(application).
 
 %% Application callbacks
--export([start/2, stop/1, start/0]).
+-export([start/2, stop/1, start/0, stop/0]).
 
 %%====================================================================
 %% API
 %%====================================================================
 
 start() ->
-    factorial_sup:start_link().
+    application:start(?MODULE).
 
 start(_StartType, _StartArgs) ->
-    factorial_sup:start_link().
+    factorial_supervisor:start_link().
 
 %%--------------------------------------------------------------------
+
+stop() ->
+    mnesia:stop(),
+    application:stop(?MODULE).
+
 stop(_State) ->
     ok.
 

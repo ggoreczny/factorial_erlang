@@ -27,7 +27,9 @@ start_link() ->
 init([]) ->
   io:format("~p (~p) starting ... ~n", [{global, ?MODULE}, self()]),
 
-  RestartStrategy = one_for_one,
+  %%  one_for_one, one_for_all
+
+  RestartStrategy = one_for_all,
   MaxRestarts = 3,
   MaxSecondsBetweenRestarts = 5,
   Flags = {RestartStrategy, MaxRestarts, MaxSecondsBetweenRestarts},
@@ -47,6 +49,31 @@ init([]) ->
 
   ChildSpecifications = {factorialServerId, {factorial_server, start_link, []}, Restart, Shutdown, Type, [factorial_server]},
 
+
+  MnesiaSpecifications = {mnesiaServerId, {database_server, start_link, []}, Restart, Shutdown, Type, [database_server]},
+
   %%  tuple of restart strategy, max restarts and max time
   %%  child specification
-  {ok, {Flags, [ChildSpecifications]}}.
+  {ok, {Flags, [ChildSpecifications, MnesiaSpecifications]}}.
+
+%%
+%%-define(SERVER, ?MODULE).
+%%
+%%%%====================================================================
+%%%% API functions
+%%%%====================================================================
+%%
+%%start_link() ->
+%%  supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+%%
+%%%%====================================================================
+%%%% Supervisor callbacks
+%%%%====================================================================
+%%
+%%%% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
+%%init([]) ->
+%%  {ok, { {one_for_all, 0, 1}, []} }.
+%%
+%%%%====================================================================
+%%%% Internal functions
+%%%%====================================================================

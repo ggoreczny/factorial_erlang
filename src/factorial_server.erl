@@ -43,7 +43,7 @@ factorial(Value, IoDevice) ->
 
 init([]) ->
   process_flag(trap_exit, true),
-  io:format("~p (~p) starting .... ~n", [{local, ?MODULE}, self()]),
+  io:format("~p (~p) starting .... ~n", [{global, ?MODULE}, self()]),
   {ok, []}.
 
 handle_call({factorial, Value}, _From, State) ->
