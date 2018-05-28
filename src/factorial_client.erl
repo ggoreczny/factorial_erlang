@@ -21,11 +21,11 @@ factorialRecorder(Value, IoDevice) ->
 
 storeComment(NodeName, Comment) ->
 
-  {atomic, Result} = database_server:store(NodeName, Comment),
+  Result  = database_server:store(NodeName, Comment),
 
   case Result of
-      ok -> io:format("Comment saved for ~p ~n", [NodeName]);
-      _ -> io:format("Comment has not been saved for ~p ~n", [NodeName])
+    {atomic, ok} -> io:format("Comment saved for ~p ~n", [NodeName]);
+      _ -> io:format("Comment has not been saved for ~p, received ~p ~n", [NodeName, Result])
   end.
 
 getComments(NodeName) ->

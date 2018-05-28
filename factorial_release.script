@@ -1,5 +1,5 @@
 %% coding: utf-8
-%% script generated at {2018,5,28} {23,12,48}
+%% script generated at {2018,5,28} {23,22,10}
 {script,
     {"factorial_release","1.0"},
     [{preLoaded,

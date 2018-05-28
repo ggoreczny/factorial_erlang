@@ -72,11 +72,11 @@ handle_call({getDB, NodeName}, _From, State) ->
 handle_call({getDBTwo, NodeName}, _From, State) ->
   Comments = database_logic:getDBTwo(NodeName),
 
-  lists:foreach(
-    fun({CM, CreatedOn}) -> io:format("Received ~p created on ~p ~n", [CM, CreatedOn]) end,
-    Comments),
+%%  lists:foreach(
+%%    fun({CM, CreatedOn}) -> io:format("Received ~p created on ~p ~n", [CM, CreatedOn]) end,
+%%    Comments),
 
-  {reply, ok, State};
+  {reply, Comments, State};
 
 handle_call({delete, NodeName}, _From, State) ->
   database_logic:deleteDB(NodeName),
